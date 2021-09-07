@@ -1,25 +1,31 @@
 #pragma once
 
+#include <QObject>
 #include <QString>
 #include <QList>
 
+/*!
+ * \brief The AbstractCompany class это абстрактный базовый класс
+ */
 class AbstractCompany
 {
 public:
+    // Какие-то типы компаний
     enum CompanyType
     {
-        HEAVY_INDUSTRY_COMPANY_TYPE,
-        AGRICULTURAL_COMPANY_TYPE,
-        OIL_COMPANY_TYPE,
-        FISHING_COMPANY_TYPE,
+        INDUSTRY_COMPANY_TYPE,
+        PLANTS_COMPANY_TYPE,
+        PETROLEUM_COMPANY_TYPE,
+        GAMBLING_COMPANY_TYPE,
         IT_COMPANY_TYPE,
         GOVERNMENT_COMPANY_TYPE,
-        FINANCIAL_COMPANY_TYPE,
+        BANK_COMPANY_TYPE,
         COMPANY_TYPE_COUNT
     };
 
-    explicit AbstractCompany(const QString& name);
+    static QList<QString> CompanyTypeNames;
 
+    explicit AbstractCompany(const QString& name);
     virtual ~AbstractCompany() {}
 
     virtual CompanyType getCompanyType() const = 0;
@@ -42,9 +48,9 @@ public:
     void setEmployeeNumber(int value);
 
 protected:
-    QString companyName;
-    QList<QString> owners;
-    double companyIncome;
-    double companyArea;
-    int employeeNumber;
+    QString m_companyName;
+    QList<QString> m_owners;
+    double m_companyIncome;
+    double m_companyArea;
+    int m_employeeNumber;
 };

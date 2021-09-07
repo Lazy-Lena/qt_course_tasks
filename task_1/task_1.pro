@@ -5,11 +5,17 @@ CONFIG -= app_bundle
 
 SOURCES += \
         abstractcompany.cpp \
-        concrete_companies.cpp \
-        main.cpp
+        cannabisgrowingcompany.cpp \
+        companyregistry.cpp \
+        gamingcompany.cpp \
+        main.cpp \
+        russianbankcompany.cpp
 
 DESTDIR = $$PWD/../out
 
 HEADERS += \
     abstractcompany.h \
-    concrete_companies.h
+    cannabisgrowingcompany.h \
+    companyregistry.h \
+    gamingcompany.h \
+    russianbankcompany.h

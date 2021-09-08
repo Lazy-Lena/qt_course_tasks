@@ -7,6 +7,7 @@ SOURCES += \
         classunit.cpp \
         main.cpp \
         methodunit.cpp \
+        printoperatorunit.cpp \
         unit.cpp
 
 DESTDIR = $$PWD/../out
@@ -14,4 +15,6 @@ DESTDIR = $$PWD/../out
 HEADERS += \
     classunit.h \
     methodunit.h \
-    unit.h
+    printoperatorunit.h \
+    unit.h \
+    unitfactory.h

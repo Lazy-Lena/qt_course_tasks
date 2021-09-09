@@ -4,17 +4,12 @@ CONFIG += c++11 console
 CONFIG -= app_bundle
 
 SOURCES += \
-        classunit.cpp \
+    core_units.cpp \
+    cpp_units.cpp \
         main.cpp \
-        methodunit.cpp \
-        printoperatorunit.cpp \
-        unit.cpp
+
+HEADERS += \ \
+    core_units.h \
+    cpp_units.h
 
 DESTDIR = $$PWD/../out
-
-HEADERS += \
-    classunit.h \
-    methodunit.h \
-    printoperatorunit.h \
-    unit.h \
-    unitfactory.h

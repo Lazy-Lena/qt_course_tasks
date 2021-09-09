@@ -1,11 +1,7 @@
-#ifndef JAVA_UNITS_H
-#define JAVA_UNITS_H
-
+#pragma once
 #include "core_units.h"
 
-namespace java {
-
-class JavaClassUnit : public core::ClassUnit
+class JavaClassUnit : public ClassUnit
 {
 public:
     using ClassUnit::ClassUnit;
@@ -16,40 +12,30 @@ public:
     std::string compile(unsigned int level = 0) const override;
 };
 
-// --------------------------------------------- *** --------------------------------------------- //
-
 /*!
  * \brief The JavaMethodUnit class это про методы в Java,
  *  тут я тоже не уверена, что обработала все сочетания правильно, пыталась немного
  */
-class JavaMethodUnit : public core::MethodUnit
+class JavaMethodUnit : public MethodUnit
 {
 public:
     using MethodUnit::MethodUnit;
     std::string compile(unsigned int level = 0) const override;
 };
 
-// --------------------------------------------- *** --------------------------------------------- //
-
-class JavaPrintOperatorUnit : public core::PrintOperatorUnit
+class JavaPrintOperatorUnit : public PrintOperatorUnit
 {
 public:
     using PrintOperatorUnit::PrintOperatorUnit;
     std::string compile(unsigned int level = 0) const override;
 };
 
-// --------------------------------------------- *** --------------------------------------------- //
-
-class JavaUnitFactory : public core::UnitFactory
+class JavaUnitFactory : public UnitFactory
 {
 public:
-    std::shared_ptr<core::ClassUnit> createClassUnit(const std::string& name, core::Unit::Flags flags) const override;
+    std::shared_ptr<ClassUnit> createClassUnit(const std::string& name, Unit::Flags flags) const override;
 
-    std::shared_ptr<core::MethodUnit> createMethodUnit(const std::string& name, const std::string& returnType, core::Unit::Flags flags) const override;
+    std::shared_ptr<MethodUnit> createMethodUnit(const std::string& name, const std::string& returnType, Unit::Flags flags) const override;
 
-    std::shared_ptr<core::PrintOperatorUnit> createPrintOperatorUnit(const std::string& text) const override;
+    std::shared_ptr<PrintOperatorUnit> createPrintOperatorUnit(const std::string& text) const override;
 };
-
-} // namespace java
-
-#endif // JAVA_UNITS_H

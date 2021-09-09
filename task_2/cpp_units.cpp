@@ -1,8 +1,6 @@
 #include "cpp_units.h"
 #include <sstream>
 
-namespace cpp {
-
 void CppClassUnit::add(const std::shared_ptr<Unit> &unit, Unit::Flags flags)
 {
     auto accessModifier = PRIVATE;
@@ -15,7 +13,7 @@ void CppClassUnit::add(const std::shared_ptr<Unit> &unit, Unit::Flags flags)
 std::string CppClassUnit::compile(unsigned int level) const
 {
     std::stringstream result;
-    result << core::generateShift(level)
+    result << generateShift(level)
            << "class "
            << m_name
            << " {\n";
@@ -30,17 +28,15 @@ std::string CppClassUnit::compile(unsigned int level) const
         }
         result << "\n";
     }
-    result << core::generateShift(level) << "};\n";
+    result << generateShift(level) << "};\n";
 
     return result.str();
 }
 
-// --------------------------------------------- *** --------------------------------------------- //
-
 std::string CppMethodUnit::compile(unsigned int level) const
 {
     std::stringstream result;
-    result << core::generateShift(level);
+    result << generateShift(level);
 
     if (m_flags & STATIC) {
         result << "static ";
@@ -58,35 +54,29 @@ std::string CppMethodUnit::compile(unsigned int level) const
     for(const auto& b : m_body) {
         result << b->compile(level + 1);
     }
-    result << core::generateShift(level) + "}\n";
+    result << generateShift(level) + "}\n";
 
     return result.str();
 }
 
-// --------------------------------------------- *** --------------------------------------------- //
-
 std::string CppPrintOperatorUnit::compile(unsigned int level) const
 {
     std::stringstream ss;
-    ss << core::generateShift(level) << "printf( \"" << m_text << "\" );\n";
+    ss << generateShift(level) << "printf( \"" << m_text << "\" );\n";
     return ss.str();
 }
 
-// --------------------------------------------- *** --------------------------------------------- //
-
-std::shared_ptr<core::ClassUnit> CppUnitFactory::createClassUnit(const std::string &name, core::Unit::Flags) const
+std::shared_ptr<ClassUnit> CppUnitFactory::createClassUnit(const std::string &name, Unit::Flags) const
 {
     return std::make_shared<CppClassUnit>(name);
 }
 
-std::shared_ptr<core::MethodUnit> CppUnitFactory::createMethodUnit(const std::string &name, const std::string &returnType, core::Unit::Flags flags) const
+std::shared_ptr<MethodUnit> CppUnitFactory::createMethodUnit(const std::string &name, const std::string &returnType, Unit::Flags flags) const
 {
     return std::make_shared<CppMethodUnit>(name, returnType, flags);
 }
 
-std::shared_ptr<core::PrintOperatorUnit> CppUnitFactory::createPrintOperatorUnit(const std::string &text) const
+std::shared_ptr<PrintOperatorUnit> CppUnitFactory::createPrintOperatorUnit(const std::string &text) const
 {
     return std::make_shared<CppPrintOperatorUnit>(text);
-}
-
 }

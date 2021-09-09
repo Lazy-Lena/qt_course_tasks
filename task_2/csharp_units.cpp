@@ -1,9 +1,7 @@
 #include "csharp_units.h"
 #include <sstream>
 
-namespace csharp {
-
-void CsharpClassUnit::add(const std::shared_ptr<core::Unit> &unit, core::Unit::Flags flags)
+void CsharpClassUnit::add(const std::shared_ptr<Unit> &unit, Unit::Flags flags)
 {
     auto accessModifier = PRIVATE;
     if (flags <= PRIVATE_PROTECTED) { // потому что дальше java-спецификаторы
@@ -15,7 +13,7 @@ void CsharpClassUnit::add(const std::shared_ptr<core::Unit> &unit, core::Unit::F
 std::string CsharpClassUnit::compile(unsigned int level) const
 {
     std::stringstream result;
-    result << core::generateShift(level) << ACCESS_MODIFIERS[m_flag]
+    result << generateShift(level) << ACCESS_MODIFIERS[m_flag]
               << " class " << m_name << " {\n";
 
     for (size_t i = 0; i < m_fields.size(); ++i)
@@ -26,24 +24,22 @@ std::string CsharpClassUnit::compile(unsigned int level) const
         }
 
         for (const auto& field : m_fields[i]) {
-            result << core::generateShift(level + 1)
+            result << generateShift(level + 1)
                    << ACCESS_MODIFIERS[i] << ' ' + field->compile(level + 1);
         }
         result << '\n';
     }
 
-    result << core::generateShift(level) << "};\n";
+    result << generateShift(level) << "};\n";
     return result.str();
 }
-
-// --------------------------------------------- *** --------------------------------------------- //
 
 std::string CsharpMethodUnit::compile(unsigned int level) const
 {
     std::stringstream result;
 
     if (m_flags & Modifier::ABSTRACT
-            && !(m_flags & Modifier::ASYNC) && !(m_flags & Modifier::STATIC)) {
+            && !(m_flags & Modifier::VIRTUAL) && !(m_flags & Modifier::STATIC)) {
         result << "abstract ";
     }
 
@@ -52,11 +48,7 @@ std::string CsharpMethodUnit::compile(unsigned int level) const
         result << "sealed ";
     }
 
-    if (m_flags & Modifier::ASYNC) {
-        result << "async ";
-    }
-
-    // для interop, я хз, что это
+    // я хз, что это
     if (m_flags & Modifier::UNSAFE) {
         result << "unsafe ";
     }
@@ -72,35 +64,29 @@ std::string CsharpMethodUnit::compile(unsigned int level) const
     for (const auto& it : m_body) {
         result << it->compile(level + 1);
     }
-    result << core::generateShift(level) << "}\n";
+    result << generateShift(level) << "}\n";
 
     return result.str();
 }
 
-// --------------------------------------------- *** --------------------------------------------- //
-
 std::string CsharpPrintOperatorUnit::compile(unsigned int level) const
 {
     std::stringstream ss;
-    ss << core::generateShift(level) << "Console.WriteLine( \"" << m_text + "\" );\n";
+    ss << generateShift(level) << "Console.WriteLine( \"" << m_text + "\" );\n";
     return ss.str();
 }
 
-// --------------------------------------------- *** --------------------------------------------- //
-
-std::shared_ptr<core::ClassUnit> CsharpUnitFactory::createClassUnit(const std::string &name, core::Unit::Flags flags) const
+std::shared_ptr<ClassUnit> CsharpUnitFactory::createClassUnit(const std::string &name, Unit::Flags flags) const
 {
     return std::make_shared<CsharpClassUnit>(name, flags);
 }
 
-std::shared_ptr<core::MethodUnit> CsharpUnitFactory::createMethodUnit(const std::string &name, const std::string &returnType, core::Unit::Flags flags) const
+std::shared_ptr<MethodUnit> CsharpUnitFactory::createMethodUnit(const std::string &name, const std::string &returnType, Unit::Flags flags) const
 {
     return std::make_shared<CsharpMethodUnit>(name, returnType, flags);
 }
 
-std::shared_ptr<core::PrintOperatorUnit> CsharpUnitFactory::createPrintOperatorUnit(const std::string &text) const
+std::shared_ptr<PrintOperatorUnit> CsharpUnitFactory::createPrintOperatorUnit(const std::string &text) const
 {
     return std::make_shared<CsharpPrintOperatorUnit>(text);
 }
-
-} // namespace csharp {

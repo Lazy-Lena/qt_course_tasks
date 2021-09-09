@@ -1,11 +1,9 @@
-#ifndef UNIT_H
-#define UNIT_H
+#pragma once
 
 #include <memory>
 #include <string>
 #include <vector>
 
-namespace core {
 /*!
  * \brief The Unit class это у нас типа abstract base для сущностей,
  * чтобы было дерево вложенности
@@ -21,8 +19,6 @@ public:
 
     virtual std::string compile(unsigned int level = 0) const = 0;
 };
-
-// --------------------------------------------- *** --------------------------------------------- //
 
 /*!
  * \brief The ClassUnit class это abstract base для классов
@@ -44,7 +40,7 @@ public:
     static const std::vector<std::string> ACCESS_MODIFIERS;
 
 public:
-    explicit ClassUnit(const std::string& name, core::Unit::Flags flags = 0);
+    explicit ClassUnit(const std::string& name, Unit::Flags flags = 0);
 
 protected:
     using Fields = std::vector<std::shared_ptr<Unit>>;
@@ -52,8 +48,6 @@ protected:
     std::string m_name;
     std::vector<Fields> m_fields;
 };
-
-// --------------------------------------------- *** --------------------------------------------- //
 
 /*!
  * \brief The ClassUnit class это abstract base для методов
@@ -66,7 +60,6 @@ public:
         CONST			= 1 << 1,
         VIRTUAL			= 1 << 2,
         ABSTRACT		= 1 << 3,
-        ASYNC			= 1 << 4,
         UNSAFE			= 1 << 5,
         SEALED			= 1 << 6,
         FINAL			= SEALED,
@@ -86,12 +79,10 @@ protected:
     std::vector<std::shared_ptr<Unit>> m_body;
 };
 
-// --------------------------------------------- *** --------------------------------------------- //
-
 /*!
  * \brief The ClassUnit class это abstract base для вывода в консоль
  */
-class PrintOperatorUnit : public core::Unit
+class PrintOperatorUnit : public Unit
 {
 public:
     explicit PrintOperatorUnit(const std::string& text);
@@ -99,8 +90,6 @@ public:
 protected:
     std::string m_text;
 };
-
-// --------------------------------------------- *** --------------------------------------------- //
 
 /*!
  * \brief The UnitFactory class это абстрактный интерфейс для фабрик генерации
@@ -134,15 +123,4 @@ public:
     virtual std::shared_ptr<PrintOperatorUnit> createPrintOperatorUnit(const std::string& text) const = 0;
 };
 
-// --------------------------------------------- *** --------------------------------------------- //
-
-/*!
- * \brief generateShift -- форматирование, это НЕ часть единицы абстрации, потому свободная функция
- * \param level         -- уровень вложенности
- * \return              -- отступ
- */
 std::string generateShift(unsigned int level);
-
-} // namespace core
-
-#endif // UNIT_H

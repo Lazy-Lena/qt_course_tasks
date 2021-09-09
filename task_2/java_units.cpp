@@ -1,9 +1,7 @@
 #include "java_units.h"
 #include <sstream>
 
-namespace java {
-
-void JavaClassUnit::add(const std::shared_ptr<core::Unit> &unit, core::Unit::Flags flags)
+void JavaClassUnit::add(const std::shared_ptr<Unit> &unit, Unit::Flags flags)
 {
     auto accessModifier = PRIVATE;
     if (flags <= PRIVATE || flags >= FINAL) { // не шарповые!
@@ -20,7 +18,7 @@ std::string JavaClassUnit::compile(unsigned int level) const
     if (m_flag <= PRIVATE || m_flag >= FINAL) {
         modifier = ACCESS_MODIFIERS[m_flag];
     }
-    result << core::generateShift(level) << modifier << " class " << m_name << " {\n";
+    result << generateShift(level) << modifier << " class " << m_name << " {\n";
 
     for (size_t i = 0; i < m_fields.size(); ++i)
     {
@@ -28,17 +26,15 @@ std::string JavaClassUnit::compile(unsigned int level) const
             continue;
         }
         for (const auto& field : m_fields[i]) {
-            result << core::generateShift(level + 1)
+            result << generateShift(level + 1)
                    << ACCESS_MODIFIERS[i] << ' ' + field->compile(level + 1);
         }
         result << '\n';
     }
 
-    result << core::generateShift(level) << "};\n";
+    result << generateShift(level) << "};\n";
     return result.str();
 }
-
-// --------------------------------------------- *** --------------------------------------------- //
 
 std::string JavaMethodUnit::compile(unsigned int level) const
 {
@@ -61,35 +57,29 @@ std::string JavaMethodUnit::compile(unsigned int level) const
     for (const auto& it : m_body) {
         result << it->compile(level + 1);
     }
-    result << core::generateShift(level) << "}\n";
+    result << generateShift(level) << "}\n";
 
     return result.str();
 }
 
-// --------------------------------------------- *** --------------------------------------------- //
-
 std::string JavaPrintOperatorUnit::compile(unsigned int level) const
 {
     std::stringstream ss;
-    ss << core::generateShift(level) << "System.out.println( \"" << m_text << "\" );\n";
+    ss << generateShift(level) << "System.out.println( \"" << m_text << "\" );\n";
     return ss.str();
 }
 
-// --------------------------------------------- *** --------------------------------------------- //
-
-std::shared_ptr<core::ClassUnit> JavaUnitFactory::createClassUnit(const std::string &name, core::Unit::Flags flags) const
+std::shared_ptr<ClassUnit> JavaUnitFactory::createClassUnit(const std::string &name, Unit::Flags flags) const
 {
     return std::make_shared<JavaClassUnit>(name, flags);
 }
 
-std::shared_ptr<core::MethodUnit> JavaUnitFactory::createMethodUnit(const std::string &name, const std::string &returnType, core::Unit::Flags flags) const
+std::shared_ptr<MethodUnit> JavaUnitFactory::createMethodUnit(const std::string &name, const std::string &returnType, Unit::Flags flags) const
 {
     return std::make_shared<JavaMethodUnit>(name, returnType, flags);
 }
 
-std::shared_ptr<core::PrintOperatorUnit> JavaUnitFactory::createPrintOperatorUnit(const std::string &text) const
+std::shared_ptr<PrintOperatorUnit> JavaUnitFactory::createPrintOperatorUnit(const std::string &text) const
 {
     return std::make_shared<JavaPrintOperatorUnit>(text);
 }
-
-} // namespace java

@@ -1,11 +1,7 @@
-#ifndef CSHARP_UNITS_H
-#define CSHARP_UNITS_H
-
+#pragma once
 #include "core_units.h"
 
-namespace csharp {
-
-class CsharpClassUnit : public core::ClassUnit
+class CsharpClassUnit : public ClassUnit
 {
 public:
     using ClassUnit::ClassUnit;
@@ -15,41 +11,29 @@ public:
     std::string compile(unsigned int level = 0) const override;
 };
 
-// --------------------------------------------- *** --------------------------------------------- //
-
 /*!
  * \brief The CsharpMethodUnit class это класс для генерации методов.
- * Я попыталась обработать все модификаторы, но вряд ли это получилось корректно,
- * там очень много сочетаний, если их гуглить, я не понимаю C# так хорошо ((
  */
-class CsharpMethodUnit : public core::MethodUnit
+class CsharpMethodUnit : public MethodUnit
 {
 public:
     using MethodUnit::MethodUnit;
     std::string compile(unsigned int level = 0) const override;
 };
 
-// --------------------------------------------- *** --------------------------------------------- //
-
-class CsharpPrintOperatorUnit : public core::PrintOperatorUnit
+class CsharpPrintOperatorUnit : public PrintOperatorUnit
 {
 public:
     using PrintOperatorUnit::PrintOperatorUnit;
     std::string compile(unsigned int level = 0) const override;
 };
 
-// --------------------------------------------- *** --------------------------------------------- //
-
-class CsharpUnitFactory : public core::UnitFactory
+class CsharpUnitFactory : public UnitFactory
 {
 public:
-    std::shared_ptr<core::ClassUnit> createClassUnit(const std::string& name, core::Unit::Flags flags) const override;
+    std::shared_ptr<ClassUnit> createClassUnit(const std::string& name, Unit::Flags flags) const override;
 
-    std::shared_ptr<core::MethodUnit> createMethodUnit(const std::string& name, const std::string& returnType, core::Unit::Flags flags) const override;
+    std::shared_ptr<MethodUnit> createMethodUnit(const std::string& name, const std::string& returnType, Unit::Flags flags) const override;
 
-    std::shared_ptr<core::PrintOperatorUnit> createPrintOperatorUnit(const std::string& text) const override;
+    std::shared_ptr<PrintOperatorUnit> createPrintOperatorUnit(const std::string& text) const override;
 };
-
-} // namespace csharp
-
-#endif // CSHARP_UNITS_H

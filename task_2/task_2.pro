@@ -7,11 +7,13 @@ SOURCES += \
     core_units.cpp \
     cpp_units.cpp \
     csharp_units.cpp \
+    java_units.cpp \
         main.cpp \
 
 HEADERS += \ \
     core_units.h \
     cpp_units.h \
-    csharp_units.h
+    csharp_units.h \
+    java_units.h
 
 DESTDIR = $$PWD/../out

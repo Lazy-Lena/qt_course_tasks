@@ -10,9 +10,7 @@ static constexpr double SIZE_PRESIZION = 0.0001;
 CustomFileModel::CustomFileModel(QObject *parent)
     : QFileSystemModel(parent)
 {
-    connect(this, &QFileSystemModel::rootPathChanged, [this](const QString& newPath) {
-            updateStatistics(newPath);
-    });
+    connect(this, &QFileSystemModel::rootPathChanged, this, &CustomFileModel::onRootPathChanged);
 }
 
 int CustomFileModel::columnCount(const QModelIndex &parent) const
@@ -66,4 +64,9 @@ void CustomFileModel::updateStatisticsImpl(const QString &path)
 {
     m_cachedStats = m_statStrategy->getDirectoryInfo(path);
     emit layoutChanged(); // force update view
+}
+
+void CustomFileModel::onRootPathChanged(const QString &newPath)
+{
+    updateStatistics(newPath);
 }

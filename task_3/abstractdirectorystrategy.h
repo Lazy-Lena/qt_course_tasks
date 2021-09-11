@@ -14,7 +14,4 @@ public:
 
 protected:
     qint64 getTotalSize(const QString &path);
-
-protected:
-    QHash<QString, qint64> m_dirSizeCache; // optimization
 };

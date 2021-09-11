@@ -11,7 +11,8 @@ namespace QtCharts {
     class QChart;
 }
 
-QT_FORWARD_DECLARE_CLASS(QModelIndex)
+class QModelIndex;
+class QFileSystemModel;
 class AbstractDirectoryStrategy;
 class AbstractStatHolder;
 class CustomFileModel;
@@ -31,10 +32,13 @@ private:
 
 private slots:
     void updateStatsViews();
+    void onChooseButtonClicked();
+    void onFilesTreeSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
+    void onStatsComboBoxIndexChanged(int index);
 
 private:
     const QSharedPointer<Ui::DirectoryStatsMainWindow> ui;
-    CustomFileModel *m_treeModel;
+    QFileSystemModel *m_treeModel;
     CustomFileModel *m_tableModel;
 
     QSharedPointer<AbstractDirectoryStrategy> m_fileStatStrategy;

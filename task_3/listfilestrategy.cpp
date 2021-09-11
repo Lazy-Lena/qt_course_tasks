@@ -14,7 +14,7 @@ QHash<QString, double> ListFileStrategy::getDirectoryInfo(const QString &path)
         result.insert(path, 1);
     }
 
-    qint64 total = getTotalSize(pathInfo.absoluteFilePath()); // hope, caching works
+    qint64 total = getTotalSize(pathInfo.absoluteFilePath());
 
     QDir directory(path);
     for (const auto& it : directory.entryInfoList(QDir::Dirs | QDir::Files| QDir::NoDotAndDotDot

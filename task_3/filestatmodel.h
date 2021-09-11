@@ -18,6 +18,9 @@ public:
 protected:
     void updateStatisticsImpl(const QString& path) override;
 
+private slots:
+    void onRootPathChanged(const QString& newPath);
+
 private:
     QHash<QString, double> m_cachedStats;
 };

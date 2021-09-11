@@ -7,22 +7,22 @@ SOURCES += \
         abstractdirectorystrategy.cpp \
         abstractstatholder.cpp \
         chartupdater.cpp \
-        directorystatsmainwindow.cpp \
         filestatmodel.cpp \
         groupfilestrategy.cpp \
         listfilestrategy.cpp \
-        main.cpp
+        main.cpp \
+        statsmainwindow.cpp
 
 HEADERS += \
     abstractdirectorystrategy.h \
     abstractstatholder.h \
     chartupdater.h \
-    directorystatsmainwindow.h \
     filestatmodel.h \
     groupfilestrategy.h \
-    listfilestrategy.h
+    listfilestrategy.h \
+    statsmainwindow.h
 
 FORMS += \
-    directorystatsmainwindow.ui
+    statsmainwindow.ui
 
 DESTDIR = $$PWD/../out

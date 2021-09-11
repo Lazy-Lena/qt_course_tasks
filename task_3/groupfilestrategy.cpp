@@ -18,7 +18,7 @@ QHash<QString, double> GroupFileStrategy::getDirectoryInfo(const QString &path)
         result.insert(path, 1);
     }
 
-    qint64 total = getTotalSize(pathInfo.absoluteFilePath()); // hope, caching works
+    qint64 total = getTotalSize(pathInfo.absoluteFilePath());
     QHash<QString, qint64> typeSizes;
 
     QDir directory(path);

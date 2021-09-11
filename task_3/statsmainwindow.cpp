@@ -1,5 +1,5 @@
-#include "directorystatsmainwindow.h"
-#include "ui_directorystatsmainwindow.h"
+#include "statsmainwindow.h"
+#include "ui_statsmainwindow.h"
 
 #include <QDir>
 #include <QFileDialog>
@@ -14,9 +14,9 @@
 #include "chartupdater.h"
 #include "abstractstatholder.h"
 
-DirectoryStatsMainWindow::DirectoryStatsMainWindow(QWidget *parent)
+StatsMainWindow::StatsMainWindow(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::DirectoryStatsMainWindow)
+    , ui(new Ui::StatsMainWindow)
     , m_treeModel(new QFileSystemModel(this))
     , m_tableModel(new CustomFileModel(this))
     , m_fileStatStrategy(QSharedPointer<ListFileStrategy>::create())
@@ -28,7 +28,7 @@ DirectoryStatsMainWindow::DirectoryStatsMainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->choosePushButton, &QAbstractButton::clicked, this, &DirectoryStatsMainWindow::onChooseButtonClicked);
+    connect(ui->choosePushButton, &QAbstractButton::clicked, this, &StatsMainWindow::onChooseButtonClicked);
 
     ui->listFilesRadioButton->setChecked(true);
 
@@ -40,13 +40,13 @@ DirectoryStatsMainWindow::DirectoryStatsMainWindow(QWidget *parent)
     ui->filesTableView->setModel(m_tableModel);
     ui->filesTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    connect(ui->filesTreeView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &DirectoryStatsMainWindow::onFilesTreeSelectionChanged);
+    connect(ui->filesTreeView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &StatsMainWindow::onFilesTreeSelectionChanged);
 
     m_statHolders.push_back(m_tableModel);
     m_statHolders.push_back(m_chartStatHolder);
 
-    connect(ui->listFilesRadioButton, &QRadioButton::toggled, this, &DirectoryStatsMainWindow::updateStatsViews);
-    connect(ui->groupFilesRadioButton, &QRadioButton::toggled, this, &DirectoryStatsMainWindow::updateStatsViews);
+    connect(ui->listFilesRadioButton, &QRadioButton::toggled, this, &StatsMainWindow::updateStatsViews);
+    connect(ui->groupFilesRadioButton, &QRadioButton::toggled, this, &StatsMainWindow::updateStatsViews);
     updateStatsViews();
 
     chooseTreeFolder(QDir::currentPath());
@@ -61,13 +61,13 @@ DirectoryStatsMainWindow::DirectoryStatsMainWindow(QWidget *parent)
     m_chart->legend()->setVisible(true);
     m_chart->legend()->setAlignment(Qt::AlignBottom);
 
-    connect(ui->statsComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DirectoryStatsMainWindow::onStatsComboBoxIndexChanged);
+    connect(ui->statsComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &StatsMainWindow::onStatsComboBoxIndexChanged);
 }
 
-DirectoryStatsMainWindow::~DirectoryStatsMainWindow()
+StatsMainWindow::~StatsMainWindow()
 { }
 
-void DirectoryStatsMainWindow::chooseTreeFolder(const QString &path)
+void StatsMainWindow::chooseTreeFolder(const QString &path)
 {
     ui->dirLineEdit->setText(path);
     ui->filesTreeView->setRootIndex(m_treeModel->setRootPath(path));
@@ -81,7 +81,7 @@ void DirectoryStatsMainWindow::chooseTreeFolder(const QString &path)
     }
 }
 
-void DirectoryStatsMainWindow::handleTreeSelection(const QModelIndex &index)
+void StatsMainWindow::handleTreeSelection(const QModelIndex &index)
 {
     const QString currPath = m_treeModel->filePath(index);
     bool isDir = QFileInfo(currPath).isDir();
@@ -92,7 +92,7 @@ void DirectoryStatsMainWindow::handleTreeSelection(const QModelIndex &index)
     }
 }
 
-void DirectoryStatsMainWindow::updateStatsViews()
+void StatsMainWindow::updateStatsViews()
 {
     bool goodStats = ui->listFilesRadioButton->isChecked();
     const QString path = m_tableModel->rootPath();
@@ -104,7 +104,7 @@ void DirectoryStatsMainWindow::updateStatsViews()
     }
 }
 
-void DirectoryStatsMainWindow::onChooseButtonClicked()
+void StatsMainWindow::onChooseButtonClicked()
 {
     const QString path = QFileDialog::getExistingDirectory(this, "Выберите папку для статистики", QDir::currentPath());
     if (!path.isEmpty()) {
@@ -112,13 +112,13 @@ void DirectoryStatsMainWindow::onChooseButtonClicked()
     }
 }
 
-void DirectoryStatsMainWindow::onFilesTreeSelectionChanged(const QModelIndex &current, const QModelIndex &previous)
+void StatsMainWindow::onFilesTreeSelectionChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous)
     handleTreeSelection(current);
 }
 
-void DirectoryStatsMainWindow::onStatsComboBoxIndexChanged(int index)
+void StatsMainWindow::onStatsComboBoxIndexChanged(int index)
 {
     ui->statsViewStackedWidget->setCurrentIndex(index > 0 ? 1 : 0);
     if (index == 1) {

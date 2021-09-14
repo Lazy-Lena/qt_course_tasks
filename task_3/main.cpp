@@ -1,8 +1,14 @@
-#include <QCoreApplication>
+#include <QApplication>
+#include <QSharedPointer>
+#include <QFileInfo>
+#include <QDir>
+
+#include "statsmainwindow.h"
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
-
-    return a.exec();
+    QApplication app(argc, argv);
+    StatsMainWindow wnd;
+    wnd.show();
+    return app.exec();
 }

@@ -85,11 +85,9 @@ void StatsMainWindow::handleTreeSelection(const QModelIndex &index)
 {
     const QString currPath = m_treeModel->filePath(index);
     bool isDir = QFileInfo(currPath).isDir();
-    ui->filesTableView->setVisible(isDir);
-    if (isDir) {
-        ui->filesTableView->setRootIndex(m_tableModel->setRootPath(currPath));
-        updateStatsViews();
-    }
+    ui->filesTableView->setVisible(true);
+    ui->filesTableView->setRootIndex(m_tableModel->setRootPath(isDir ? currPath : QFileInfo(currPath).absolutePath()));
+    updateStatsViews();
 }
 
 void StatsMainWindow::updateStatsViews()

@@ -50,4 +50,6 @@ private:
 
     AbstractStatHolder* m_chartStatHolder;
     QList<AbstractStatHolder*> m_statHolders;
+
+    QString m_currentStatRoot;
 };

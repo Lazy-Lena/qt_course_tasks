@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QFileSystemModel>
 #include <QVBoxLayout>
 #include <QtCharts/QChartView>
 #include <QtCharts/QChart>
@@ -36,7 +37,6 @@ StatsMainWindow::StatsMainWindow(QWidget *parent)
     ui->filesTreeView->setModel(m_treeModel);
     ui->filesTreeView->header()->setSectionResizeMode(QHeaderView::Stretch);
 
-    m_tableModel->setFilter(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs);
     ui->filesTableView->setModel(m_tableModel);
     ui->filesTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
@@ -72,35 +72,27 @@ void StatsMainWindow::chooseTreeFolder(const QString &path)
     ui->dirLineEdit->setText(path);
     ui->filesTreeView->setRootIndex(m_treeModel->setRootPath(path));
 
-    ui->filesTableView->setRootIndex(m_tableModel->setRootPath(""));
-
     if (!ui->filesTreeView->selectionModel()->selectedIndexes().isEmpty()) {
         handleTreeSelection(ui->filesTreeView->selectionModel()->selectedIndexes().first());
-    } else {
-        ui->filesTableView->hide();
     }
 }
 
 void StatsMainWindow::handleTreeSelection(const QModelIndex &index)
 {
     const QString currPath = m_treeModel->filePath(index);
-    bool isDir = QFileInfo(currPath).isDir();
-    ui->filesTableView->setVisible(isDir);
-    if (isDir) {
-        ui->filesTableView->setRootIndex(m_tableModel->setRootPath(currPath));
-        updateStatsViews();
-    }
+    QFileInfo fileInfo = QFileInfo(currPath);
+    m_currentStatRoot = fileInfo.isDir() ? currPath : fileInfo.absolutePath();
+    updateStatsViews();
 }
 
 void StatsMainWindow::updateStatsViews()
 {
     bool goodStats = ui->listFilesRadioButton->isChecked();
-    const QString path = m_tableModel->rootPath();
 
     for (AbstractStatHolder* statHolder : m_statHolders) {
         statHolder->setStatisticsStrategy(goodStats ? m_fileStatStrategy : m_fileGroupStatStrategy);
         statHolder->setStatsGrouped(!goodStats);
-        statHolder->updateStatistics(path);
+        statHolder->updateStatistics(m_currentStatRoot);
     }
 }
 

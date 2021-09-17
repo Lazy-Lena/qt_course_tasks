@@ -5,17 +5,8 @@ void AbstractStatHolder::setStatsGrouped(bool grouped)
     m_statIsGrouped = grouped;
 }
 
-void AbstractStatHolder::setStatisticsStrategy(const QSharedPointer<AbstractDirectoryStrategy> &strategy)
+void AbstractStatHolder::updateStatistics(const QMap<QString, double> &stats)
 {
-    m_statStrategy = strategy;
-//    updateStatistics(m_path);
-}
-
-void AbstractStatHolder::updateStatistics(const QString &path)
-{
-    m_path = path;
-    if (!m_statStrategy || path.isEmpty()) {
-        return;
-    }
-    updateStatisticsImpl(path);
+    m_stats = stats;
+    updateStatisticsImpl(stats);
 }

@@ -18,4 +18,6 @@ protected:
 
 private:
     QMap<QString, double> calculateStats(const QHash<QString, qint64> &sizes) const;
+
+
 };

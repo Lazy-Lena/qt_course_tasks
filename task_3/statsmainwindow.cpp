@@ -42,7 +42,7 @@ StatsMainWindow::StatsMainWindow(QWidget *parent)
 
     connect(ui->filesTreeView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &StatsMainWindow::onFilesTreeSelectionChanged);
 
-    m_statHolders.push_back(m_tableModel);
+//    m_statHolders.push_back(m_tableModel);
     m_statHolders.push_back(m_chartStatHolder);
 
     connect(ui->listFilesRadioButton, &QRadioButton::toggled, this, &StatsMainWindow::updateStatsViews);
@@ -89,11 +89,21 @@ void StatsMainWindow::updateStatsViews()
 {
     bool goodStats = ui->listFilesRadioButton->isChecked();
 
+    QSharedPointer<AbstractDirectoryStrategy> strat = goodStats ? m_fileStatStrategy : m_fileGroupStatStrategy;
+    QMap<QString, double> stat = strat->getDirectoryInfo(m_currentStatRoot);
+    m_tableModel->setStatData(stat);
+
     for (AbstractStatHolder* statHolder : m_statHolders) {
-        statHolder->setStatisticsStrategy(goodStats ? m_fileStatStrategy : m_fileGroupStatStrategy);
         statHolder->setStatsGrouped(!goodStats);
-        statHolder->updateStatistics(m_currentStatRoot);
+        statHolder->updateStatistics(stat);
     }
+
+//    for (AbstractStatHolder* statHolder : m_statHolders) {
+//        statHolder->setStatisticsStrategy(goodStats ? m_fileStatStrategy : m_fileGroupStatStrategy);
+//        statHolder->setStatsGrouped(!goodStats);
+//        statHolder->updateStatistics(m_currentStatRoot);
+//    }
+
 }
 
 void StatsMainWindow::onChooseButtonClicked()

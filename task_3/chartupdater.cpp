@@ -19,19 +19,19 @@ ChartUpdater::ChartUpdater(const QSharedPointer<QtCharts::QChart> &chart, QObjec
 void ChartUpdater::setDisplayMode(ChartUpdater::DisplayMode mode)
 {
     m_mode = mode;
-    updateStatistics(m_path);
+    updateStatistics(m_stats);
 }
 
-void ChartUpdater::updateStatisticsImpl(const QString& path)
+void ChartUpdater::updateStatisticsImpl(const QMap<QString, double> &stats)
 {
-    auto info = m_statStrategy->getDirectoryInfo(path);
+//    auto info = m_statStrategy->getDirectoryInfo(stats);
     m_chart->removeAllSeries();
 
     if (m_mode == PIE_MODE)
     {
         QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
-        for (auto& name : info.keys()) {
-            series->append(!m_statIsGrouped ? QFileInfo(name).fileName() : name, info[name]);
+        for (auto& name : stats.keys()) {
+            series->append(!m_statIsGrouped ? QFileInfo(name).fileName() : name, stats[name]);
         }
         m_chart->addSeries(series);
     }
@@ -39,9 +39,9 @@ void ChartUpdater::updateStatisticsImpl(const QString& path)
     if (m_mode == BAR_MODE)
     {
         QtCharts::QBarSeries *series = new QtCharts::QBarSeries();
-        for (auto& name : info.keys()) {
+        for (auto& name : stats.keys()) {
             QtCharts::QBarSet *set0 = new QtCharts::QBarSet(!m_statIsGrouped ? QFileInfo(name).fileName() : name);
-            *set0<< info[name];
+            *set0<< stats[name];
             series->append(set0);
         }
         m_chart->addSeries(series);

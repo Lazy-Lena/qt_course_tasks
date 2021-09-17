@@ -3,7 +3,7 @@
 #include "abstractstatholder.h"
 #include <QAbstractTableModel>
 
-class CustomFileModel : public QAbstractTableModel, public AbstractStatHolder
+class CustomFileModel : public QAbstractTableModel/*, public AbstractStatHolder*/
 {
     Q_OBJECT
 public:
@@ -17,9 +17,10 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-protected:
-    void updateStatisticsImpl(const QString& path) override;
+    void setStatData(const QMap<QString, double> &stats);
+//protected:
+//    void updateStatisticsImpl(const QString& path) override;
 
 private:
-    QMap<QString, double> m_cachedStats;
+    QMap<QString, double> m_cachedStats; // ВОТ, она их туда кладёт.
 };

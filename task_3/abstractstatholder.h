@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QSharedPointer>
+#include <QMap>
 class AbstractDirectoryStrategy;
 
 class AbstractStatHolder
@@ -10,15 +11,12 @@ public:
 
     void setStatsGrouped(bool grouped);
 
-    virtual void setStatisticsStrategy(const QSharedPointer<AbstractDirectoryStrategy> &strategy);
-
-    void updateStatistics(const QString& path);
+    void updateStatistics(const QMap<QString, double> &stats);
 
 protected:
-    virtual void updateStatisticsImpl(const QString& path) = 0;
+    virtual void updateStatisticsImpl(const QMap<QString, double> &stats) = 0;
 
 protected:
     bool m_statIsGrouped = false;
-    QSharedPointer<AbstractDirectoryStrategy> m_statStrategy = nullptr;
-    QString m_path;
+    QMap<QString, double> m_stats;
 };

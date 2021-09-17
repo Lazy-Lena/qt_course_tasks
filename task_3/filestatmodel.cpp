@@ -55,8 +55,15 @@ QVariant CustomFileModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-void CustomFileModel::updateStatisticsImpl(const QString &path)
+void CustomFileModel::setStatData(const QMap<QString, double> &stats)
 {
-    m_cachedStats = m_statStrategy->getDirectoryInfo(path);
-    emit layoutChanged(); // force update view
+   beginResetModel();
+   m_cachedStats = stats;
+   endResetModel();
 }
+
+//void CustomFileModel::updateStatisticsImpl(const QString &path)
+//{
+//    m_cachedStats = m_statStrategy->getDirectoryInfo(path);
+//    emit layoutChanged(); // force update view
+//}

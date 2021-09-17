@@ -1,10 +1,10 @@
 #include "abstractdirectorystrategy.h"
 
-QMap<QString, double> AbstractDirectoryStrategy::getDirectoryInfo(const QString &path) const
+QMap<QString, double> AbstractDirectoryStrategy::getDirectoryInfo(const QString &path) const // шаблонный метод
 {
     QHash<QString, qint64> sizes;
-    traversePath(path, sizes);
-    return calculateStats(sizes);
+    traversePath(path, sizes); // шаг 1 <-- подменяется
+    return calculateStats(sizes); // шаг 2 <-- не подменяется
 }
 
 QMap<QString, double> AbstractDirectoryStrategy::calculateStats(const QHash<QString, qint64> &sizes) const

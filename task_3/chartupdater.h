@@ -22,7 +22,7 @@ public:
     void setDisplayMode(DisplayMode mode);
 
 protected:
-    void updateStatisticsImpl(const QString& path) override;
+    void updateStatisticsImpl(const QMap<QString, double> &stats) override;
 
 private:
     DisplayMode m_mode;
